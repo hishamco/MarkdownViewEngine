@@ -81,10 +81,10 @@ namespace MarkdownViewEngine
 
             if (string.IsNullOrEmpty(executingFilePath))
             {
-                return "/" + pagePath;
+                return Path.AltDirectorySeparatorChar + pagePath;
             }
 
-            var index = executingFilePath.LastIndexOf('/');
+            var index = executingFilePath.LastIndexOf(Path.AltDirectorySeparatorChar);
             return executingFilePath.Substring(0, index + 1) + pagePath;
         }
 
@@ -137,17 +137,14 @@ namespace MarkdownViewEngine
                 throw new ArgumentNullException(nameof(key));
             }
 
-            object routeValue;
-            if (!context.RouteData.Values.TryGetValue(key, out routeValue))
+            if (!context.RouteData.Values.TryGetValue(key, out object routeValue))
             {
                 return null;
             }
 
             var actionDescriptor = context.ActionDescriptor;
             string normalizedValue = null;
-
-            string value;
-            if (actionDescriptor.RouteValues.TryGetValue(key, out value) &&
+            if (actionDescriptor.RouteValues.TryGetValue(key, out string value) &&
                 !string.IsNullOrEmpty(value))
             {
                 normalizedValue = value;
@@ -162,14 +159,10 @@ namespace MarkdownViewEngine
             return stringRouteValue;
         }
 
-        private static bool IsApplicationRelativePath(string name)
-        {
-            return name[0] == '~' || name[0] == '/';
-        }
+        private static bool IsApplicationRelativePath(string name) =>
+            name[0] == '~' || name[0] == Path.AltDirectorySeparatorChar;
 
-        private static bool IsRelativePath(string name)
-        {
-            return name.EndsWith(ViewExtension, StringComparison.OrdinalIgnoreCase);
-        }
+        private static bool IsRelativePath(string name) =>
+            name.EndsWith(ViewExtension, StringComparison.OrdinalIgnoreCase);
     }
 }

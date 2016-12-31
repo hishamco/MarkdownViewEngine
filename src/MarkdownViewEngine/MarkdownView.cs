@@ -13,24 +13,13 @@ namespace MarkdownViewEngine
             IMarkdownViewEngine viewEngine,
             IMarkdownPage markdownPage)
         {
-            if (viewEngine == null)
-            {
+            _viewEngine = viewEngine ?? 
                 throw new ArgumentNullException(nameof(viewEngine));
-            }
-
-            if (markdownPage == null)
-            {
+            MarkdownPage = markdownPage ?? 
                 throw new ArgumentNullException(nameof(markdownPage));
-            }
-
-            _viewEngine = viewEngine;
-            MarkdownPage = markdownPage;
         }
 
-        public string Path
-        {
-            get { return MarkdownPage.Path; }
-        }
+        public string Path => MarkdownPage.Path;
 
         public IMarkdownPage MarkdownPage { get; }
 

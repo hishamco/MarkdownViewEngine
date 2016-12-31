@@ -10,12 +10,8 @@ namespace MarkdownViewEngine
 
         public MarkdownMvcViewOptionsSetup(IMarkdownViewEngine markdownViewEngine)
         {
-            if (markdownViewEngine == null)
-            {
+            _markdownViewEngine = markdownViewEngine ?? 
                 throw new ArgumentNullException(nameof(markdownViewEngine));
-            }
-
-            _markdownViewEngine = markdownViewEngine;
         }
 
         public void Configure(MvcViewOptions options)
