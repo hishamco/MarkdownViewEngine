@@ -11,8 +11,6 @@ namespace MarkdownViewEngine
 {
     public class MarkdownPage : IMarkdownPage
     {
-        private const string LayoutDirective = "@Layout";
-
         private readonly IFileProvider _contentRootFileProvider;
 
         public MarkdownPage(IFileProvider contentRootFileProvider)
@@ -36,9 +34,9 @@ namespace MarkdownViewEngine
             {
                 var layoutLine = await reader.ReadLineAsync();
                 var markdown = await reader.ReadToEndAsync();
-                if (layoutLine.StartsWith(LayoutDirective))
+                if (layoutLine.StartsWith(MarkdownDirectives.Layout))
                 {
-                    Layout = new String(layoutLine.Skip(LayoutDirective.Length + 1).ToArray());
+                    Layout = new String(layoutLine.Skip(MarkdownDirectives.Layout.Length + 1).ToArray());
                     markdown.Remove(0, layoutLine.Length - 1);
                 }
                 else
