@@ -45,11 +45,11 @@ namespace MarkdownViewEngine
 
         private async Task RenderLayoutAsync(ViewContext context, TextWriter writer)
         {
+            var pageContent = MarkdownPage.BodyContent.ToString();
             if (MarkdownPage.Layout != null)
             {
                 const string BodyToken = "@Body";
                 var layoutPage = GetLayoutPage(context, MarkdownPage.Path, MarkdownPage.Layout);
-                var pageContent = MarkdownPage.BodyContent.ToString();
                 writer = await RenderPageAsync(layoutPage, context);
 
                 var layoutContent = layoutPage.BodyContent.ToString();
@@ -60,6 +60,10 @@ namespace MarkdownViewEngine
 
                 layoutContent = layoutContent.Replace(BodyToken, pageContent);
                 await writer.WriteAsync(layoutContent);
+            }
+            else
+            {
+                await writer.WriteAsync(pageContent);
             }
         }
 
