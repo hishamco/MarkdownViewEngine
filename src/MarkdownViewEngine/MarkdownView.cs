@@ -53,6 +53,11 @@ namespace MarkdownViewEngine
                 writer = await RenderPageAsync(layoutPage, context);
 
                 var layoutContent = layoutPage.BodyContent.ToString();
+                if (!layoutContent.Contains(BodyToken))
+                {
+                    throw new InvalidOperationException($"The {BodyToken} is missing in {layoutPage.Path}.");
+                }
+
                 layoutContent = layoutContent.Replace(BodyToken, pageContent);
                 await writer.WriteAsync(layoutContent);
             }
