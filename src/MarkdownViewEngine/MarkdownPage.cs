@@ -1,6 +1,7 @@
 ﻿using CommonMark;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.FileProviders;
 using System;
 using System.IO;
 using System.Linq;
@@ -12,6 +13,13 @@ namespace MarkdownViewEngine
     {
         private const string LayoutDirective = "@Layout";
 
+        private readonly IFileProvider _contentRootFileProvider;
+
+        public MarkdownPage(IFileProvider contentRootFileProvider)
+        {
+            _contentRootFileProvider = contentRootFileProvider;
+        }
+
         public IHtmlContent BodyContent { get; set; }
 
         public string Layout { get; set; }
@@ -22,7 +30,9 @@ namespace MarkdownViewEngine
 
         public async Task ExecuteAsync()
         {
-            using (var reader = new StreamReader(File.OpenRead(Path)))
+            var fileInfo = _contentRootFileProvider.GetFileInfo(Path);
+            using (var readStream = fileInfo.CreateReadStream())
+            using (var reader = new StreamReader(readStream))
             {
                 var layoutLine = await reader.ReadLineAsync();
                 var markdown = await reader.ReadToEndAsync();
@@ -30,6 +40,10 @@ namespace MarkdownViewEngine
                 {
                     Layout = new String(layoutLine.Skip(LayoutDirective.Length + 1).ToArray());
                     markdown.Remove(0, layoutLine.Length - 1);
+                }
+                else
+                {
+                    markdown = String.Concat(layoutLine, markdown);
                 }
 
                 var html = CommonMarkConverter.Convert(markdown);

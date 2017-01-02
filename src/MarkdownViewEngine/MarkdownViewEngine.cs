@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.Options;
 
 namespace MarkdownViewEngine
 {
@@ -15,9 +17,11 @@ namespace MarkdownViewEngine
         private const string ControllerKey = "controller";
 
         private readonly MarkdownViewEngineOptions _options;
+        private readonly IFileProvider _contentRootFileProvider;
 
         public MarkdownViewEngine(
-            IOptions<MarkdownViewEngineOptions> optionsAccessor)
+            IOptions<MarkdownViewEngineOptions> optionsAccessor,
+            IHostingEnvironment env)
         {
             _options = optionsAccessor.Value;
 
@@ -25,6 +29,8 @@ namespace MarkdownViewEngine
             {
                 throw new ArgumentException(nameof(optionsAccessor));
             }
+
+            _contentRootFileProvider = env.ContentRootFileProvider;
         }
 
         public ViewEngineResult FindView(ActionContext context, string viewName, bool isMainPage)
@@ -99,10 +105,13 @@ namespace MarkdownViewEngine
             foreach (var location in _options.ViewLocationFormats)
             {
                 var view = string.Format(location, viewName, controllerName);
-                if (File.Exists(view))
+                var fileInfo = _contentRootFileProvider.GetFileInfo(view);
+                if (fileInfo.Exists)
                 {
-                    var page = new MarkdownPage { Path = view };
-
+                    var page = new MarkdownPage(_contentRootFileProvider)
+                    {
+                        Path = view
+                    };
                     return ViewEngineResult.Found(viewName, new MarkdownView(this, page));
                 }
 
@@ -120,8 +129,10 @@ namespace MarkdownViewEngine
                 return ViewEngineResult.NotFound(applicationRelativePath, Enumerable.Empty<string>());
             }
 
-            var page = new MarkdownPage { Path = applicationRelativePath };
-
+            var page = new MarkdownPage(_contentRootFileProvider)
+            {
+                Path = applicationRelativePath
+            };
             return ViewEngineResult.Found(applicationRelativePath, new MarkdownView(this, page));
         }
 

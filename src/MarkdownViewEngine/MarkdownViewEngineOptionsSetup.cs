@@ -12,8 +12,8 @@ namespace MarkdownViewEngine
 
         private static void ConfigureMarkdown(MarkdownViewEngineOptions markdownOptions)
         {
-            markdownOptions.ViewLocationFormats.Add("Views/{1}/{0}" + MarkdownViewEngine.ViewExtension);
-            markdownOptions.ViewLocationFormats.Add("Views/Shared/{0}" + MarkdownViewEngine.ViewExtension);
+            markdownOptions.ViewLocationFormats.Add("/Views/{1}/{0}" + MarkdownViewEngine.ViewExtension);
+            markdownOptions.ViewLocationFormats.Add("/Views/Shared/{0}" + MarkdownViewEngine.ViewExtension);
         }
     }
 }
