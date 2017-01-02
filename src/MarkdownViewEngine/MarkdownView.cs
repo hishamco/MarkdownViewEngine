@@ -47,15 +47,14 @@ namespace MarkdownViewEngine
         {
             if (MarkdownPage.Layout != null)
             {
+                const string BodyToken = "@Body";
                 var layoutPage = GetLayoutPage(context, MarkdownPage.Path, MarkdownPage.Layout);
                 var pageContent = MarkdownPage.BodyContent.ToString();
                 writer = await RenderPageAsync(layoutPage, context);
-                using (var reader = new StreamReader(File.OpenRead(layoutPage.Path)))
-                {
-                    var layoutContent = await reader.ReadToEndAsync();
-                    layoutContent = layoutContent.Replace("@Body", pageContent);
-                    await writer.WriteAsync(layoutContent);
-                }
+
+                var layoutContent = layoutPage.BodyContent.ToString();
+                layoutContent = layoutContent.Replace(BodyToken, pageContent);
+                await writer.WriteAsync(layoutContent);
             }
         }
 
