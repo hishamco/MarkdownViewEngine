@@ -8,6 +8,8 @@ namespace MarkdownViewEngine
     {
         ViewContext ViewContext { get; set; }
 
+        string Layout { get; set; }
+
         IHtmlContent BodyContent { get; set; }
 
         string Path { get; set; }
