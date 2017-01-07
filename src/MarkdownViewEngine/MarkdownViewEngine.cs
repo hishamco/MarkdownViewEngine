@@ -112,7 +112,8 @@ namespace MarkdownViewEngine
                     {
                         Path = view
                     };
-                    return ViewEngineResult.Found(viewName, new MarkdownView(this, page));
+                    var viewStartPage = GetViewStartPage();
+                    return ViewEngineResult.Found(viewName, new MarkdownView(this, viewStartPage, page));
                 }
 
                 searchedLocations.Add(view);
@@ -133,7 +134,8 @@ namespace MarkdownViewEngine
             {
                 Path = applicationRelativePath
             };
-            return ViewEngineResult.Found(applicationRelativePath, new MarkdownView(this, page));
+            var viewStartPage = GetViewStartPage();
+            return ViewEngineResult.Found(applicationRelativePath, new MarkdownView(this, viewStartPage, page));
         }
 
         private static string GetNormalizedRouteValue(ActionContext context, string key)
@@ -175,5 +177,26 @@ namespace MarkdownViewEngine
 
         private static bool IsRelativePath(string name) =>
             name.EndsWith(ViewExtension, StringComparison.OrdinalIgnoreCase);
+
+        private IMarkdownPage GetViewStartPage()
+        {
+            const string viewStartPage = "_ViewStart";
+            IMarkdownPage page = null;
+            foreach (var location in _options.ViewLocationFormats)
+            {
+                var view = string.Format(location, viewStartPage, string.Empty);
+                var fileInfo = _contentRootFileProvider.GetFileInfo(view);
+                if (fileInfo.Exists)
+                {
+                    page = new MarkdownPage(_contentRootFileProvider)
+                    {
+                        Path = view
+                    };
+                    break;
+                }
+            }
+
+            return page;
+        }
     }
 }

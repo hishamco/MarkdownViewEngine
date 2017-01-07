@@ -10,13 +10,16 @@ namespace MarkdownViewEngine
     public class MarkdownView : IView
     {
         private readonly IMarkdownViewEngine _viewEngine;
+        private readonly IMarkdownPage _viewStartPage;
 
         public MarkdownView(
             IMarkdownViewEngine viewEngine,
+            IMarkdownPage viewStartPage,
             IMarkdownPage markdownPage)
         {
             _viewEngine = viewEngine ?? 
                 throw new ArgumentNullException(nameof(viewEngine));
+            _viewStartPage = viewStartPage;
             MarkdownPage = markdownPage ?? 
                 throw new ArgumentNullException(nameof(markdownPage));
         }
@@ -32,15 +35,44 @@ namespace MarkdownViewEngine
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var bodyWriter = await RenderPageAsync(MarkdownPage, context);
+            var bodyWriter = await RenderPageAsync(MarkdownPage, context, invokeViewStart: true);
             await RenderLayoutAsync(context, bodyWriter);
         }
 
-        private async Task<TextWriter> RenderPageAsync(IMarkdownPage page, ViewContext context)
+        private async Task<TextWriter> RenderPageAsync(
+            IMarkdownPage page,
+            ViewContext context,
+            bool invokeViewStart)
+        {
+            if (invokeViewStart)
+            {
+                await RenderViewStartsAsync(context);
+            }
+
+            await RenderPageCoreAsync(page, context);
+
+            return page.ViewContext.Writer;
+        }
+
+        private Task RenderPageCoreAsync(IMarkdownPage page, ViewContext context)
         {
             page.ViewContext = context;
-            await page.ExecuteAsync();
-            return page.ViewContext.Writer;
+            return page.ExecuteAsync();
+        }
+
+        private async Task RenderViewStartsAsync(ViewContext context)
+        {
+            if (_viewStartPage != null)
+            {
+                string layout = null;
+                await RenderPageCoreAsync(_viewStartPage, context);
+                layout = _viewEngine.GetAbsolutePath(_viewStartPage.Path, _viewStartPage.Layout);
+
+                if (layout != null)
+                {
+                    MarkdownPage.Layout = layout;
+                }
+            }
         }
 
         private async Task RenderLayoutAsync(ViewContext context, TextWriter writer)
@@ -50,7 +82,7 @@ namespace MarkdownViewEngine
             {
                 const string BodyToken = "@Body";
                 var layoutPage = GetLayoutPage(context, MarkdownPage.Path, MarkdownPage.Layout);
-                writer = await RenderPageAsync(layoutPage, context);
+                writer = await RenderPageAsync(layoutPage, context, invokeViewStart: true);
 
                 var layoutContent = layoutPage.BodyContent.ToString();
                 if (!layoutContent.Contains(BodyToken))

@@ -37,7 +37,10 @@ namespace MarkdownViewEngine
                 if (layoutLine.StartsWith(MarkdownDirectives.Layout))
                 {
                     Layout = new String(layoutLine.Skip(MarkdownDirectives.Layout.Length + 1).ToArray());
-                    markdown.Remove(0, layoutLine.Length - 1);
+                    if (!String.IsNullOrEmpty(markdown))
+                    {
+                        markdown.Remove(0, layoutLine.Length - 1);
+                    }             
                 }
                 else
                 {
