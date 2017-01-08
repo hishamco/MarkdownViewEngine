@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Markdown View Engine Sample</title>
+    <title>Markdown View Engine Sample - {{title}}</title>
     <link href="/styles/bootstrap.css" rel="stylesheet">
   </head>
   <body>
@@ -36,7 +36,7 @@
       </div>
     </div>
     <div class="container">
-	  @Body
+	  {{body}}
       <hr>
       <footer>
         <p>&copy; 2017 Markdown View Engine.</p>

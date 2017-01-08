@@ -24,6 +24,8 @@ namespace MarkdownViewEngine
 
         public string Path { get; set; }
 
+        public string Title { get; set; }
+
         public ViewContext ViewContext { get; set; }
 
         public async Task ExecuteAsync()
@@ -32,19 +34,38 @@ namespace MarkdownViewEngine
             using (var readStream = fileInfo.CreateReadStream())
             using (var reader = new StreamReader(readStream))
             {
-                var layoutLine = await reader.ReadLineAsync();
+                var pageLine = await reader.ReadLineAsync();
                 var markdown = await reader.ReadToEndAsync();
-                if (layoutLine.StartsWith(MarkdownDirectives.Layout))
+
+                if (pageLine.StartsWith(MarkdownDirectives.Page))
                 {
-                    Layout = new String(layoutLine.Skip(MarkdownDirectives.Layout.Length + 1).ToArray());
+                    var parts = pageLine.Split(' ').Skip(1);
+                    foreach (var part in parts)
+                    {
+                        var seperatorIndex = part.IndexOf("=");
+                        var name = part.Substring(0, seperatorIndex);
+                        var value = part.Substring(seperatorIndex + 1).Trim('"');
+                        if (name == "layout")
+                        {
+                            Layout = value;
+                        }
+                        else if(name == "title")
+                        {
+                            Title = value;
+                        }
+                        else
+                        {
+                            throw new ArgumentException();
+                        }
+                    }
                     if (!String.IsNullOrEmpty(markdown))
                     {
-                        markdown.Remove(0, layoutLine.Length - 1);
-                    }             
+                        markdown.Remove(0, pageLine.Length - 1);
+                    }
                 }
                 else
                 {
-                    markdown = String.Concat(layoutLine, markdown);
+                    markdown = String.Concat(pageLine, markdown);
                 }
 
                 var html = CommonMarkConverter.Convert(markdown);

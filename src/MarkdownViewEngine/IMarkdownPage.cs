@@ -14,6 +14,8 @@ namespace MarkdownViewEngine
 
         string Path { get; set; }
 
+        string Title { get; set; }
+
         Task ExecuteAsync();
     }
 }
