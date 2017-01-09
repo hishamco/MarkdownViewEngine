@@ -34,12 +34,12 @@ namespace MarkdownViewEngine
             using (var readStream = fileInfo.CreateReadStream())
             using (var reader = new StreamReader(readStream))
             {
-                var pageLine = await reader.ReadLineAsync();
+                var directiveLine = await reader.ReadLineAsync();
                 var markdown = await reader.ReadToEndAsync();
 
-                if (pageLine.StartsWith(MarkdownDirectives.Page))
+                if (directiveLine.StartsWith(MarkdownDirectives.Page, StringComparison.OrdinalIgnoreCase))
                 {
-                    var parts = pageLine.Split(' ').Skip(1);
+                    var parts = directiveLine.Split(' ').Skip(1);
                     foreach (var part in parts)
                     {
                         var seperatorIndex = part.IndexOf("=");
@@ -60,12 +60,16 @@ namespace MarkdownViewEngine
                     }
                     if (!String.IsNullOrEmpty(markdown))
                     {
-                        markdown.Remove(0, pageLine.Length - 1);
+                        markdown.Remove(0, directiveLine.Length - 1);
                     }
+                }
+                else if (directiveLine.StartsWith(MarkdownDirectives.Layout, StringComparison.OrdinalIgnoreCase))
+                {
+                    Layout = directiveLine.Substring(MarkdownDirectives.Layout.Length + 1);
                 }
                 else
                 {
-                    markdown = String.Concat(pageLine, markdown);
+                    markdown = String.Concat(directiveLine, markdown);
                 }
 
                 var html = CommonMarkConverter.Convert(markdown);

@@ -2,6 +2,8 @@
 {
     public static class MarkdownDirectives
     {
-        public static readonly string Page = "@page";
+        public static readonly string Layout = "@Layout";
+
+        public static readonly string Page = "@Page";
     }
 }
