@@ -5,6 +5,7 @@ using Microsoft.Extensions.FileProviders;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MarkdownViewEngine
@@ -39,7 +40,9 @@ namespace MarkdownViewEngine
 
                 if (directiveLine.StartsWith(MarkdownDirectives.Page, StringComparison.OrdinalIgnoreCase))
                 {
-                    var parts = directiveLine.Split(' ').Skip(1);
+                    var parts = Regex.Split(directiveLine,
+                                    "(?<=^[^\"]*(?:\"[^\"]*\"[^\"]*)*) (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", RegexOptions.Compiled)
+                                    .Skip(1);
                     foreach (var part in parts)
                     {
                         var seperatorIndex = part.IndexOf("=");
@@ -49,7 +52,7 @@ namespace MarkdownViewEngine
                         {
                             Layout = value;
                         }
-                        else if(name == "title")
+                        else if (name == "title")
                         {
                             Title = value;
                         }
