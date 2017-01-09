@@ -6,5 +6,11 @@ namespace MarkdownViewEngineSample.Controllers
     {
         [HttpGet("/")]
         public IActionResult Index() => View();
+
+        [HttpGet("/about")]
+        public IActionResult About() => View();
+
+        [HttpGet("/contact")]
+        public IActionResult Contact() => View();
     }
 }
