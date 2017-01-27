@@ -12,14 +12,11 @@ namespace MarkdownViewEngine
         public virtual void Process(string properties)
         {
             Properties = new ExpandoObject();
-            var parts = Regex.Split(properties,
-                "(?<=^[^\"]*(?:\"[^\"]*\"[^\"]*)*) (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)",
-                RegexOptions.Compiled);
-            foreach (var part in parts)
+            var regex = new Regex("([^=\\s]+)\\s*=\\s*\"([^\"]*)\"", RegexOptions.Compiled);
+            foreach (Match match in regex.Matches(properties))
             {
-                var seperatorIndex = part.IndexOf("=");
-                var name = ToProper(part.Substring(0, seperatorIndex));
-                var value = part.Substring(seperatorIndex + 1).Trim('"');
+                var name = ToProper(match.Groups[1].Value);
+                var value = match.Groups[2].Value;
                 ((IDictionary<String, Object>)Properties)[name] = value;
             }
         }
