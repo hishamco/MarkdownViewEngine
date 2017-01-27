@@ -1,4 +1,4 @@
-﻿@page title="About"
+﻿@page title="About" layout="_AnotherSiteLayout"
 
 ## About
 

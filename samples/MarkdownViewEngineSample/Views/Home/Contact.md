@@ -1,4 +1,4 @@
-﻿@page title="Contact"
+﻿@page title="Contact" layout="_AnotherSiteLayout"
 
 ## Contact
 
