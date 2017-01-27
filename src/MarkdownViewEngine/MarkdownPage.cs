@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 using System;
 using System.IO;
 using System.Linq;
@@ -13,10 +14,13 @@ namespace MarkdownViewEngine
     public class MarkdownPage : IMarkdownPage
     {
         private readonly IFileProvider _contentRootFileProvider;
+        private readonly MarkdownViewEngineOptions _options;
 
-        public MarkdownPage(IFileProvider contentRootFileProvider)
+        public MarkdownPage(IFileProvider contentRootFileProvider,
+            MarkdownViewEngineOptions options)
         {
             _contentRootFileProvider = contentRootFileProvider;
+            _options = options;
         }
 
         public IHtmlContent BodyContent { get; set; }
@@ -61,7 +65,7 @@ namespace MarkdownViewEngine
                 markdown = content;
             }
 
-            var html = CommonMarkConverter.Convert(markdown);
+            var html = CommonMarkConverter.Convert(markdown, _options.MarkdownSettings);
             BodyContent = new HtmlString(html);
         }
     }

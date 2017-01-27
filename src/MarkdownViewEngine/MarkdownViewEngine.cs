@@ -108,7 +108,7 @@ namespace MarkdownViewEngine
                 var fileInfo = _contentRootFileProvider.GetFileInfo(view);
                 if (fileInfo.Exists)
                 {
-                    var page = new MarkdownPage(_contentRootFileProvider)
+                    var page = new MarkdownPage(_contentRootFileProvider, _options)
                     {
                         Path = view
                     };
@@ -130,7 +130,7 @@ namespace MarkdownViewEngine
                 return ViewEngineResult.NotFound(applicationRelativePath, Enumerable.Empty<string>());
             }
 
-            var page = new MarkdownPage(_contentRootFileProvider)
+            var page = new MarkdownPage(_contentRootFileProvider, _options)
             {
                 Path = applicationRelativePath
             };
@@ -188,7 +188,7 @@ namespace MarkdownViewEngine
                 var fileInfo = _contentRootFileProvider.GetFileInfo(view);
                 if (fileInfo.Exists)
                 {
-                    page = new MarkdownPage(_contentRootFileProvider)
+                    page = new MarkdownPage(_contentRootFileProvider, _options)
                     {
                         Path = view
                     };
