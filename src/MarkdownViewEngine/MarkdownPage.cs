@@ -32,52 +32,37 @@ namespace MarkdownViewEngine
         public async Task ExecuteAsync()
         {
             var fileInfo = _contentRootFileProvider.GetFileInfo(Path);
+            string content;
+            string markdown = string.Empty;
             using (var readStream = fileInfo.CreateReadStream())
             using (var reader = new StreamReader(readStream))
             {
-                var directiveLine = await reader.ReadLineAsync();
-                var markdown = await reader.ReadToEndAsync();
-
-                if (directiveLine.StartsWith(MarkdownDirectives.Page, StringComparison.OrdinalIgnoreCase))
-                {
-                    var parts = Regex.Split(directiveLine,
-                                    "(?<=^[^\"]*(?:\"[^\"]*\"[^\"]*)*) (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", RegexOptions.Compiled)
-                                    .Skip(1);
-                    foreach (var part in parts)
-                    {
-                        var seperatorIndex = part.IndexOf("=");
-                        var name = part.Substring(0, seperatorIndex);
-                        var value = part.Substring(seperatorIndex + 1).Trim('"');
-                        if (name == "layout")
-                        {
-                            Layout = value;
-                        }
-                        else if (name == "title")
-                        {
-                            Title = value;
-                        }
-                        else
-                        {
-                            throw new ArgumentException();
-                        }
-                    }
-                    if (!String.IsNullOrEmpty(markdown))
-                    {
-                        markdown.Remove(0, directiveLine.Length - 1);
-                    }
-                }
-                else if (directiveLine.StartsWith(MarkdownDirectives.Layout, StringComparison.OrdinalIgnoreCase))
-                {
-                    Layout = directiveLine.Substring(MarkdownDirectives.Layout.Length + 1);
-                }
-                else
-                {
-                    markdown = String.Concat(directiveLine, markdown);
-                }
-
-                var html = CommonMarkConverter.Convert(markdown);
-                BodyContent = new HtmlString(html);
+                content = await reader.ReadToEndAsync();
             }
+            if (content.StartsWith(MarkdownDirectives.Page, StringComparison.OrdinalIgnoreCase))
+            {
+                var newLineIndex = content.IndexOf(Environment.NewLine, MarkdownDirectives.Page.Length);
+                var pageProperties = content.Substring(MarkdownDirectives.Page.Length, newLineIndex - MarkdownDirectives.Page.Length).Trim();
+                var pageDirective = new MarkdownPageDirective();
+                pageDirective.Process(pageProperties);
+                Title = pageDirective.Title;
+                Layout = Layout ?? pageDirective.Layout;
+                markdown = content.Substring(content.IndexOf(Environment.NewLine));
+            }
+            else if (content.StartsWith(MarkdownDirectives.Layout, StringComparison.OrdinalIgnoreCase))
+            {
+                var layoutProperties = content.Substring(MarkdownDirectives.Layout.Length).Trim();
+                var layoutDirective = new MarkdownLayoutDirective();
+                layoutDirective.Process(layoutProperties);
+                Layout = Layout ?? layoutDirective.Name;
+            }
+            else
+            {
+                markdown = content;
+            }
+
+            var html = CommonMarkConverter.Convert(markdown);
+            BodyContent = new HtmlString(html);
         }
     }
 }

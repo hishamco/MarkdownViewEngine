@@ -1,1 +1,1 @@
-﻿@layout _SiteLayout
+﻿@layout Name="_SiteLayout"
