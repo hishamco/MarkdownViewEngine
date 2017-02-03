@@ -81,7 +81,6 @@ namespace MarkdownViewEngine
             if (MarkdownPage.Layout != null)
             {
                 const string BodyToken = "{{body}}";
-                const string TitleToken = "{{title}}";
                 var layoutPage = GetLayoutPage(context, MarkdownPage.Path, MarkdownPage.Layout);
                 writer = await RenderPageAsync(layoutPage, context, invokeViewStart: true);
 
@@ -90,7 +89,6 @@ namespace MarkdownViewEngine
                 {
                     throw new InvalidOperationException($"The {BodyToken} is missing in {layoutPage.Path}.");
                 }
-                layoutContent = layoutContent.Replace(TitleToken, MarkdownPage.Title);
                 layoutContent = layoutContent.Replace(BodyToken, pageContent);
                 await writer.WriteAsync(layoutContent);
             }
