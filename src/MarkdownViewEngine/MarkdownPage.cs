@@ -39,13 +39,13 @@ namespace MarkdownViewEngine
             }
             if (content.StartsWith(MarkdownDirectives.Page, StringComparison.OrdinalIgnoreCase))
             {
-                var newLineIndex = content.IndexOf(Environment.NewLine, MarkdownDirectives.Page.Length);
+                var newLineIndex = content.IndexOf("\n", MarkdownDirectives.Page.Length);
                 var pageProperties = content.Substring(MarkdownDirectives.Page.Length, newLineIndex - MarkdownDirectives.Page.Length).Trim();
                 var pageDirective = new MarkdownPageDirective();
                 pageDirective.Process(pageProperties);
                 Title = pageDirective.Title;
                 Layout = Layout ?? pageDirective.Layout;
-                markdown = content.Substring(content.IndexOf(Environment.NewLine));
+                markdown = content.Substring(content.IndexOf("\n"));
             }
             else if (content.StartsWith(MarkdownDirectives.Layout, StringComparison.OrdinalIgnoreCase))
             {
