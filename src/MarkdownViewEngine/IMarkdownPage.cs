@@ -12,6 +12,8 @@ namespace MarkdownViewEngine
 
         IHtmlContent BodyContent { get; set; }
 
+        dynamic Model { get; set; }
+
         string Path { get; set; }
 
         string Title { get; set; }

@@ -21,6 +21,8 @@ namespace MarkdownViewEngine
 
         public string Layout { get; set; }
 
+        public dynamic Model { get; set; }
+
         public string Path { get; set; }
 
         public string Title { get; set; }
@@ -46,6 +48,16 @@ namespace MarkdownViewEngine
                 Title = pageDirective.Title;
                 Layout = Layout ?? pageDirective.Layout;
                 markdown = content.Substring(content.IndexOf("\n"));
+
+                var modelIndex = content.IndexOf(MarkdownDirectives.Model, StringComparison.OrdinalIgnoreCase);
+                if (modelIndex > -1)
+                {
+                    var modelProperties = content.Substring(modelIndex, content.IndexOf("\n", modelIndex) - modelIndex).Trim();
+                    var modelDirective = new MarkdownModelDirective();
+                    modelDirective.Process(modelProperties);
+                    Model = modelDirective.Model;
+                    markdown = content.Substring(content.IndexOf("\n", modelIndex));
+                }
             }
             else if (content.StartsWith(MarkdownDirectives.Layout, StringComparison.OrdinalIgnoreCase))
             {
@@ -53,6 +65,15 @@ namespace MarkdownViewEngine
                 var layoutDirective = new MarkdownLayoutDirective();
                 layoutDirective.Process(layoutProperties);
                 Layout = Layout ?? layoutDirective.Name;
+            }
+            else if (content.StartsWith(MarkdownDirectives.Model, StringComparison.OrdinalIgnoreCase))
+            {
+                var newLineIndex = content.IndexOf("\n", MarkdownDirectives.Model.Length);
+                var modelProperties = content.Substring(MarkdownDirectives.Model.Length, newLineIndex - MarkdownDirectives.Model.Length).Trim();
+                var modelDirective = new MarkdownModelDirective();
+                modelDirective.Process(modelProperties);
+                Model = modelDirective.Model;
+                markdown = content.Substring(content.IndexOf("\n"));
             }
             else
             {

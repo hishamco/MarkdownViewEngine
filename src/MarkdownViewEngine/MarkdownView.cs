@@ -97,6 +97,13 @@ namespace MarkdownViewEngine
 
                 var data = new ExpandoObject();
                 ((IDictionary<string, object>)data)[TitleTokenName] = MarkdownPage.Title;
+                if (MarkdownPage.Model != null)
+                {
+                    foreach (var prop in (IDictionary<string, object>)MarkdownPage.Model)
+                    {
+                        ((IDictionary<string, object>)data)[prop.Key] = prop.Value;
+                    }
+                }
                 layoutContent = Render.StringToString(layoutContent, data);
                 await writer.WriteAsync(layoutContent);
             }
