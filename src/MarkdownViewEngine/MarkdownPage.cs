@@ -46,7 +46,7 @@ namespace MarkdownViewEngine
                 var pageDirective = new MarkdownPageDirective();
                 pageDirective.Process(pageProperties);
                 Title = pageDirective.Title;
-                Layout = Layout ?? pageDirective.Layout;
+                Layout = pageDirective.Layout;
                 markdown = content.Substring(content.IndexOf("\n"));
 
                 var modelIndex = content.IndexOf(MarkdownDirectives.Model, StringComparison.OrdinalIgnoreCase);
