@@ -4,6 +4,8 @@
     {
         public static readonly string Layout = "@Layout";
 
+        public static readonly string Model = "@Model";
+
         public static readonly string Page = "@Page";
     }
 }
