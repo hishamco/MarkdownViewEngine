@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System;
+using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Nustache.Core;
 
 namespace MarkdownViewEngine
 {
@@ -34,7 +37,7 @@ namespace MarkdownViewEngine
             {
                 throw new ArgumentNullException(nameof(context));
             }
-
+            
             var bodyWriter = await RenderPageAsync(MarkdownPage, context, invokeViewStart: true);
             await RenderLayoutAsync(context, bodyWriter);
         }
@@ -81,6 +84,7 @@ namespace MarkdownViewEngine
             if (MarkdownPage.Layout != null)
             {
                 const string BodyToken = "{{body}}";
+                const string TitleTokenName = "title";
                 var layoutPage = GetLayoutPage(context, MarkdownPage.Path, MarkdownPage.Layout);
                 writer = await RenderPageAsync(layoutPage, context, invokeViewStart: true);
 
@@ -90,6 +94,10 @@ namespace MarkdownViewEngine
                     throw new InvalidOperationException($"The {BodyToken} is missing in {layoutPage.Path}.");
                 }
                 layoutContent = layoutContent.Replace(BodyToken, pageContent);
+
+                var data = new ExpandoObject();
+                ((IDictionary<string, object>)data)[TitleTokenName] = MarkdownPage.Title;
+                layoutContent = Render.StringToString(layoutContent, data);
                 await writer.WriteAsync(layoutContent);
             }
             else
