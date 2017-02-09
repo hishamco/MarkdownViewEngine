@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Nustache.Core;
 
@@ -97,11 +98,21 @@ namespace MarkdownViewEngine
 
                 var data = new ExpandoObject();
                 ((IDictionary<string, object>)data)[TitleTokenName] = MarkdownPage.Title;
-                if (MarkdownPage.Model != null)
+                if (context.ViewData.Model != null)
                 {
-                    foreach (var prop in (IDictionary<string, object>)MarkdownPage.Model)
+                    foreach (var prop in context.ViewData.Model.GetType().GetProperties())
                     {
-                        ((IDictionary<string, object>)data)[prop.Key] = prop.Value;
+                        ((IDictionary<string, object>)data)[prop.Name] = prop.GetValue(context.ViewData.Model);
+                    }
+                }
+                else
+                {
+                    if (MarkdownPage.Model != null)
+                    {
+                        foreach (var prop in (IDictionary<string, object>)MarkdownPage.Model)
+                        {
+                            ((IDictionary<string, object>)data)[prop.Key] = prop.Value;
+                        }
                     }
                 }
                 layoutContent = Render.StringToString(layoutContent, data);
