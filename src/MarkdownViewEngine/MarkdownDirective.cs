@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MarkdownViewEngine.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Text.RegularExpressions;
@@ -15,7 +16,7 @@ namespace MarkdownViewEngine
             var regex = new Regex("([^=\\s]+)\\s*=\\s*\"([^\"]*)\"", RegexOptions.Compiled);
             foreach (Match match in regex.Matches(properties))
             {
-                var name = ToProper(match.Groups[1].Value);
+                var name = match.Groups[1].Value.ToProper();
                 var value = match.Groups[2].Value;
                 ((IDictionary<String, Object>)Properties)[name] = value;
             }
@@ -32,8 +33,5 @@ namespace MarkdownViewEngine
 
             return objType.GetProperty(name) != null;
         }
-
-        private string ToProper(string value) =>
-            String.Concat(Char.ToUpper(value[0]), value.Substring(1));
     }
 }
