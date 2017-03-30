@@ -82,6 +82,8 @@ namespace MarkdownViewEngine
         private async Task RenderLayoutAsync(ViewContext context, TextWriter writer)
         {
             var pageContent = MarkdownPage.BodyContent.ToString();
+            MarkdownPage.Layout = MarkdownPage.Layout ?? _viewStartPage.Layout;
+
             if (MarkdownPage.Layout != null)
             {
                 const string BodyToken = "{{body}}";

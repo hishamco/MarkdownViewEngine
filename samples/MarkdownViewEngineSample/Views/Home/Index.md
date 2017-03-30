@@ -1,4 +1,4 @@
-﻿@page layout="_SiteLayout" title = "Home"
+﻿@page title = "Home"
 
 ## Markdown View Engine
 
