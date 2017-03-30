@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using System;
 
-namespace MarkdownViewEngine
+namespace My.AspNetCore.Mvc.Markdown
 {
     public class MarkdownMvcViewOptionsSetup : IConfigureOptions<MvcViewOptions>
     {

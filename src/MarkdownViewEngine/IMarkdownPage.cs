@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace MarkdownViewEngine
+namespace My.AspNetCore.Mvc.Markdown
 {
     public interface IMarkdownPage
     {

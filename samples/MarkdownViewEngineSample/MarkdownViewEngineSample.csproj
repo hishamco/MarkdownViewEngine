@@ -16,8 +16,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.0" />
   </ItemGroup>
+  
   <ItemGroup>
-    <ProjectReference Include="..\..\src\MarkdownViewEngine\MarkdownViewEngine.csproj" />
+    <ProjectReference Include="..\..\src\MarkdownViewEngine\My.AspNetCore.Mvc.Markdown.csproj" />
   </ItemGroup>
 
 </Project>

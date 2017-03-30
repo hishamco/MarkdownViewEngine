@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MarkdownViewEngine
+namespace My.AspNetCore.Mvc.Markdown
 {
     public class MarkdownViewEngineOptions
     {

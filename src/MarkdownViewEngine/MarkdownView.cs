@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Nustache.Core;
 
-namespace MarkdownViewEngine
+namespace My.AspNetCore.Mvc.Markdown
 {
     public class MarkdownView : IView
     {

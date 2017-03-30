@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 
-namespace MarkdownViewEngine
+namespace My.AspNetCore.Mvc.Markdown
 {
     public class MarkdownViewEngineOptionsSetup : ConfigureOptions<MarkdownViewEngineOptions>
     {

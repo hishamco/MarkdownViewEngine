@@ -1,4 +1,4 @@
-﻿namespace MarkdownViewEngine
+﻿namespace My.AspNetCore.Mvc.Markdown
 {
     public class MarkdownModelDirective : MarkdownDirective
     {

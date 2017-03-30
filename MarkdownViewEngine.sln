@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{AEEE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarkdownViewEngineSample", "samples\MarkdownViewEngineSample\MarkdownViewEngineSample.csproj", "{AE568D13-5E5E-4A5D-9000-6AF816B55803}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkdownViewEngine", "src\MarkdownViewEngine\MarkdownViewEngine.csproj", "{57A08001-A2D0-49E2-8C84-69DFF91241A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "My.AspNetCore.Mvc.Markdown", "src\MarkdownViewEngine\My.AspNetCore.Mvc.Markdown.csproj", "{57A08001-A2D0-49E2-8C84-69DFF91241A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ViewEngines;
 
-namespace MarkdownViewEngine
+namespace My.AspNetCore.Mvc.Markdown
 {
     public interface IMarkdownViewEngine : IViewEngine
     {

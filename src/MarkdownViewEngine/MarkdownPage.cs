@@ -6,7 +6,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace MarkdownViewEngine
+namespace My.AspNetCore.Mvc.Markdown
 {
     public class MarkdownPage : IMarkdownPage
     {

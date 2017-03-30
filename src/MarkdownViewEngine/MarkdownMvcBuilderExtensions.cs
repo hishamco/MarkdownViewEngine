@@ -1,4 +1,4 @@
-﻿using MarkdownViewEngine;
+﻿using My.AspNetCore.Mvc.Markdown;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
@@ -17,7 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddOptions();
             builder.Services.AddTransient<IConfigureOptions<MarkdownViewEngineOptions>, MarkdownViewEngineOptionsSetup>();
             builder.Services.AddTransient<IConfigureOptions<MvcViewOptions>, MarkdownMvcViewOptionsSetup>();
-            builder.Services.AddSingleton<IMarkdownViewEngine, MarkdownViewEngine.MarkdownViewEngine>();
+            builder.Services.AddSingleton<IMarkdownViewEngine, MarkdownViewEngine>();
 
             return builder;
         }
@@ -40,7 +40,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddTransient<IConfigureOptions<MarkdownViewEngineOptions>, MarkdownViewEngineOptionsSetup>();
             builder.Services.Configure(setupAction);
             builder.Services.AddTransient<IConfigureOptions<MvcViewOptions>, MarkdownMvcViewOptionsSetup>();
-            builder.Services.AddSingleton<IMarkdownViewEngine, MarkdownViewEngine.MarkdownViewEngine>();
+            builder.Services.AddSingleton<IMarkdownViewEngine, MarkdownViewEngine>();
 
             return builder;
         }

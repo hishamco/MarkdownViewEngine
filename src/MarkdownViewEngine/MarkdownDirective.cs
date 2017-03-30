@@ -1,11 +1,10 @@
-﻿using MarkdownViewEngine.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace MarkdownViewEngine
+namespace My.AspNetCore.Mvc.Markdown
 {
     public abstract class MarkdownDirective : IMarkdownDirective
     {
