@@ -5,7 +5,7 @@
 
 One Microsoft Way  
 Redmond, WA 98052-6399  
-<abbr title="Phone">P:</abbr> {{Phone}}
+<abbr title="Phone">P:</abbr> {{phone}}
 
-**Support:** [{{SupportEmail}}]({{SupportEmail}})  
-**Marketing:** [{{MarketingEmail}}]({{MarketingEmail}})
+**Support:** [{{supportEmail}}]({{supportEmail}})  
+**Marketing:** [{{marketingEmail}}]({{marketingEmail}})

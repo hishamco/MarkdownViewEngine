@@ -10,14 +10,14 @@
         {
             base.Process(properties);
 
-            if (HasProperty(Properties, nameof(Title)))
+            if (TryGetProperty(Properties, nameof(Title), out object title))
             {
-                Title = Properties.Title;
+                Title = title.ToString();
             }
 
-            if (HasProperty(Properties, nameof(Layout)))
+            if (TryGetProperty(Properties, nameof(Layout), out object layout))
             {
-                Layout = Properties.Layout;
+                Layout = layout.ToString();
             }
         }
     }

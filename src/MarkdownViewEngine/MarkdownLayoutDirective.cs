@@ -8,9 +8,9 @@
         {
             base.Process(properties);
 
-            if (HasProperty(Properties, nameof(Name)))
+            if (TryGetProperty(Properties, nameof(Name), out object name))
             {
-                Name = Properties.Name;
+                Name = name.ToString();
             }
         }
     }
